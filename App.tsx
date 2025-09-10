@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Animated } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import RootNavigator from "./src/navigation/RootNavigator";
+import { NavigationContainer } from '@react-navigation/native';
 
 SplashScreen.preventAutoHideAsync(); // keep native splash until we hide it
 
@@ -25,7 +26,7 @@ export default function App() {
         Animated.sequence([
           Animated.timing(scale, {
             toValue: 1.2,
-            duration: 300,
+            duration: 40,
             useNativeDriver: true,
           }),
           Animated.timing(scale, {
@@ -46,7 +47,11 @@ export default function App() {
 
   if (isSplashDone) {
     // ✅ After splash → show app navigation
-    return <RootNavigator />;
+    return (
+    <NavigationContainer>
+      <RootNavigator />
+    </NavigationContainer>
+  );
   }
 
   // ✅ Show splash animation

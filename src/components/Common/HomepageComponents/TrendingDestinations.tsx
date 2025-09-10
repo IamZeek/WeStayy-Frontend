@@ -21,7 +21,9 @@ export default function TrendingDestinations({ onItemPress }: any) {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scroll}>
         {destinations.map((d, idx) => (
           <TouchableOpacity key={idx} style={styles.card} onPress={onItemPress}>
-            <View style={styles.imagecontainer}><Image source={{uri:d.url}} style={styles.emojiImage}/></View>
+            <View style={styles.imagecontainer}>
+              <Image source={{uri:d.url}} style={styles.emojiImage}/>
+            </View>
             <View style={{ padding: 12 }}>
               <Text style={styles.name}>{d.name}</Text>
               <Text style={styles.price}>{d.price}</Text>
@@ -39,8 +41,8 @@ const styles = StyleSheet.create({
   seeAll: { color: "#016064", fontWeight: "600" },
   scroll: { paddingHorizontal: 20, paddingVertical: 10 },
   card: { minWidth: 160, backgroundColor: "white", borderRadius: 15, marginRight: 15, overflow: "hidden", shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 10, elevation: 3 },
-  imagecontainer: { alignItems: "center", justifyContent: "center" },
-  emojiImage:{width: "100%", height: 140, resizeMode: "contain",},
+  imagecontainer: { alignItems: "center",height: 180, justifyContent: "center" },
+  emojiImage:{width: "100%", height: "100%", resizeMode: "cover",},
   name: { fontWeight: "600", marginBottom: 4 },
   price: { color: "#666", fontSize: 12 },
 });

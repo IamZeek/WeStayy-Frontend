@@ -35,11 +35,7 @@ export default function PropertyScreen({ navigation }: any) {
   // Animated value for the sheet's height
   const sheetHeight = useRef(new Animated.Value(INITIAL_SHEET_HEIGHT)).current;
   // Animated value for the image gallery's height (interpolated from sheetHeight)
-  const galleryHeight = sheetHeight.interpolate({
-    inputRange: [MIN_SHEET_HEIGHT, MAX_SHEET_HEIGHT],
-    outputRange: [height - MIN_SHEET_HEIGHT, height - MAX_SHEET_HEIGHT],
-    extrapolate: 'clamp' // Keep it within bounds
-  });
+ 
 
   // Keep track of the current sheet height for PanResponder logic
   const lastSheetHeight = useRef(INITIAL_SHEET_HEIGHT);
@@ -48,32 +44,26 @@ export default function PropertyScreen({ navigation }: any) {
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: (evt, gestureState) => {
-        // Only vertical gestures
+        // Only allow vertical movements
         return Math.abs(gestureState.dy) > Math.abs(gestureState.dx);
       },
       onPanResponderGrant: () => {
         sheetHeight.setOffset(lastSheetHeight.current);
         sheetHeight.setValue(0);
       },
-      onPanResponderMove: Animated.event(
-        [null, { dy: sheetHeight }],
-        { useNativeDriver: false }
-      ),
-      onPanResponderRelease: (e, gestureState) => {
+      onPanResponderMove: Animated.event([null, { dy: sheetHeight }], {
+        useNativeDriver: false,
+      }),
+      onPanResponderRelease: (_, gestureState) => {
         sheetHeight.flattenOffset();
 
-        // Determine whether to snap up or down
-        const shouldExpand = gestureState.dy < 0; // drag up => expand
-        const finalHeight = shouldExpand ? MAX_SHEET_HEIGHT : MIN_SHEET_HEIGHT;
+        // Clamp to min and max
+        let newHeight = lastSheetHeight.current + -gestureState.dy;
+        newHeight = Math.max(MIN_SHEET_HEIGHT, Math.min(MAX_SHEET_HEIGHT, newHeight));
 
-        lastSheetHeight.current = finalHeight;
+        lastSheetHeight.current = newHeight;
 
-        Animated.spring(sheetHeight, {
-          toValue: finalHeight,
-          tension: 50,
-          friction: 10,
-          useNativeDriver: false,
-        }).start();
+        sheetHeight.setValue(newHeight); // directly set to avoid snap
       },
     })
   ).current;
@@ -100,7 +90,7 @@ export default function PropertyScreen({ navigation }: any) {
       </View>
 
       {/* Image Gallery - now animated */}
-      <Animated.FlatList
+      <FlatList
         data={images}
         horizontal
         pagingEnabled
@@ -112,15 +102,13 @@ export default function PropertyScreen({ navigation }: any) {
           { useNativeDriver: false }
         )}
         onMomentumScrollEnd={(ev) => {
-          const index = Math.round(
-            ev.nativeEvent.contentOffset.x / width
-          );
+          const index = Math.round(ev.nativeEvent.contentOffset.x / width);
           setCurrentIndex(index);
         }}
-        // Apply dynamic height to the FlatList container
-        style={{ height: galleryHeight }}
-        contentContainerStyle={{ height: galleryHeight }} // Also apply to content if needed
+        style={{ height: height * 0.8 }} // Fixed gallery height
+        contentContainerStyle={{ height: height * 0.8 }}
       />
+
 
       {/* Gallery counter */}
       <View style={styles.galleryCounter}>
@@ -207,8 +195,8 @@ const styles = StyleSheet.create({
   },
   galleryCounter: {
     position: "absolute",
-    top: height * 0.6 - 40, // Adjust position based on initial sheet height
-    right: 20,
+    top: height * 0.6 - 20, // Adjust position based on initial sheet height
+    left:width / 2 - 30,
     backgroundColor: "rgba(0,0,0,0.6)",
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -221,11 +209,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    // height is now controlled by Animated.Value
     backgroundColor: "white",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    overflow: 'hidden', // Hide content overflowing during animation
+    overflow: 'hidden',
   },
   sheetHandle: {
     position: "absolute",

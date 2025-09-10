@@ -13,11 +13,10 @@ export default function HomeScreen({ navigation }: any) {
       <ScrollView>
         <TopHeader onSearch={() => alert("Opening search...")} />
         <QuickFilters />
-        <TrendingDestinations onItemPress={() => navigation.navigate("Resident")}/>
-        <FeaturedProperties onItemPress={() => navigation.navigate("Resident")}/>
+        <TrendingDestinations onItemPress={() => navigation.navigate("propertyScreen")}/>
+        <FeaturedProperties onItemPress={() => navigation.navigate("propertyScreen")}/>
       </ScrollView>
       <FloatingActionButton onPress={() => alert("Opening map view")} />
-      <BottomNav />
     </SafeAreaView>
   );
 }
