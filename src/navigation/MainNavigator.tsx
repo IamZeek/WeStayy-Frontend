@@ -11,6 +11,7 @@ export default function MainNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MainScreen" component={MainTabs} options={{ animation: "slide_from_bottom" }} />
       <Stack.Screen name="propertyScreen" component={PropertyScreen} options={{ animation: "slide_from_bottom"}} />
+      <Stack.Screen name="searchpropertyScreen" component={PropertyScreen} options={{ animation: "slide_from_bottom"}} />
     </Stack.Navigator>
   );
 }

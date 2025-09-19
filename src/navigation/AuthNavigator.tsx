@@ -30,7 +30,7 @@ export default function AuthNavigator() {
       > 
             <Stack.Screen name="Login" options={{animation:"slide_from_left"}}>
               {(props) => (
-                <LoginScreen {...props} onLogin={() => setIsLoggedIn(true)} />
+                <LoginScreen {...props} onLogin={() => setIsLoggedIn(false)} />
               )}
             </Stack.Screen>
 

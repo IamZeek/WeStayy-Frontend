@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { useFonts } from '@expo-google-fonts/poppins/useFonts';
+import { Poppins_400Regular, Poppins_700Bold } from '@expo-google-fonts/poppins';
 
 const destinations = [
   { name: "Paris", emoji: "🗼", url:"https://fastly.picsum.photos/id/11/2500/1667.jpg?hmac=xxjFJtAPgshYkysU_aqx2sZir-kIOjNR9vx0te7GycQ", price: "$89/night" },
@@ -10,6 +12,12 @@ const destinations = [
 ];
 
 export default function TrendingDestinations({ onItemPress }: any) {
+
+  const [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+        Poppins_700Bold,
+      });
+
   return (
     <View>
       <View style={styles.sectionHeader}>
@@ -37,12 +45,12 @@ export default function TrendingDestinations({ onItemPress }: any) {
 
 const styles = StyleSheet.create({
   sectionHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20, paddingTop: 20 },
-  sectionTitle: { fontSize: 22, fontWeight: "bold", color: "#333" },
-  seeAll: { color: "#016064", fontWeight: "600" },
+  sectionTitle: { fontSize: 22, color: "#333", fontFamily:'Poppins_700Bold', },
+  seeAll: { color: "#016064", fontWeight: "600", fontFamily:'Poppins_400Regular' },
   scroll: { paddingHorizontal: 20, paddingVertical: 10 },
-  card: { minWidth: 160, backgroundColor: "white", borderRadius: 15, marginRight: 15, overflow: "hidden", shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 10, elevation: 3 },
+  card: { minWidth: 160, backgroundColor: "white", borderRadius: 15, marginRight: 15, overflow: "hidden", shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 10, elevation: 3,  fontFamily:'Poppins_700Bold', },
   imagecontainer: { alignItems: "center",height: 180, justifyContent: "center" },
   emojiImage:{width: "100%", height: "100%", resizeMode: "cover",},
-  name: { fontWeight: "600", marginBottom: 4 },
-  price: { color: "#666", fontSize: 12 },
+  name: { fontWeight: "600", marginBottom: 4, fontFamily:'Poppins_400Regular' },
+  price: { color: "#666", fontSize: 12, fontFamily:'Poppins_400Regular' },
 });
